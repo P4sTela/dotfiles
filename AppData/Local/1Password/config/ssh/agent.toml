@@ -33,3 +33,6 @@ vault = "Personal"
 
 [[ssh-keys]]
 vault = "dotfiles"
+
+[[ssh-keys]]
+vault = "uec"
