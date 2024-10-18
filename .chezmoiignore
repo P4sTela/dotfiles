@@ -1,3 +1,7 @@
 {{ if ne .chezmoi.os "windows" }}
 AppData/**
+{{ if ne .chezmoi.os "linux"}}
+private_dot_config/private_1Password/**/*
+{{ end }}
+{{ if eq .chezmoi.os "darwin" }}
 {{ end }}
