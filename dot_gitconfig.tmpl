@@ -2,20 +2,21 @@
 	email = p4stela.dev@gmail.com
 	name = P4sTela
 	signingkey = {{ onepasswordRead "op://dotfiles/GitHub Signing/public key" }}
+
+[push]
+	autoSetupRemote = true
+
+[gpg]
+	format = ssh
+
+[commit]
+	gpgsign = true
+
 [filter "lfs"]
 	process = git-lfs filter-process
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
-[lfs]
-	storage = ~/.cache/lfs
-	concurrenttransfers = 64
-[push]
-	autoSetupRemote = true
-[gpg]
-	format = ssh
-[commit]
-	gpgsign = true
 
 {{ if eq .chezmoi.os "darwin" }}
 # macOS
@@ -23,11 +24,18 @@
 {{ else if eq .chezmoi.os "linux" }}
 # linux
 
+[gpg "ssh"]
+	program = /opt/1Password/op-ssh-sign
 {{ else }}
 # Windows
 
 [credential]
 	helper = manager
+
 [gpg "ssh"]
 	program = C:\\Users\\main\\AppData\\Local\\1Password\\app\\8\\op-ssh-sign.exe
+
+[lfs]
+	storage = ~/.cache/lfs
+	concurrenttransfers = 64
 {{ end }}
