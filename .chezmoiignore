@@ -2,6 +2,6 @@ README.md
 {{ if ne .chezmoi.os "windows" }}
 AppData/**
 {{ else if ne .chezmoi.os "linux"}}
-private_dot_config/private_1Password/**/*
+.config/1Password/**
 {{ else if eq .chezmoi.os "darwin" }}
 {{ end }}
