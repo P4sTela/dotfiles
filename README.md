@@ -9,39 +9,22 @@ Nix Flakes + Home Manager による宣言的な環境構築
 curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
 
 # dotfiles をクローン
-ghq get github.com/p4stela/dotfiles
-cd ~/ghq/github.com/p4stela/dotfiles
+ghq get github.com/P4sTela/dotfiles
+cd ~/ghq/github.com/P4sTela/dotfiles
 
 # Home Manager 設定を適用
-nix run home-manager -- switch --flake .
+nix run home-manager -- switch --flake .#p4stela@mac   # macOS
+nix run home-manager -- switch --flake .#p4stela@wsl  # WSL
 ```
 
 ## コマンド
 
-### Home Manager (メイン環境)
-
 ```bash
 # 設定を適用
-home-manager switch --flake .
+home-manager switch --flake .#p4stela@mac
 
 # 依存関係を更新
 nix flake update
-
-# 設定を適用 (初回、home-manager コマンドがない場合)
-nix run home-manager -- switch --flake .
-```
-
-### Mogok 開発環境
-
-Rust + Node.js/Bun のプロジェクト用
-
-```bash
-# 開発シェルに入る
-nix develop ./envs/mogok
-
-# direnv 使用時 (プロジェクトディレクトリに .envrc を作成)
-echo "use flake path/to/dotfiles/envs/mogok" > .envrc
-direnv allow
 ```
 
 ## 構成
@@ -50,16 +33,71 @@ direnv allow
 .
 ├── flake.nix           # ルート flake (Home Manager)
 ├── home/
-│   └── linux.nix       # パッケージ・プログラム設定
+│   ├── common.nix      # 共通設定
+│   ├── darwin.nix      # macOS 固有設定
+│   └── linux.nix       # Linux (WSL) 固有設定
 └── envs/
-    └── mogok/          # Rust プロジェクト用開発環境
+    └── mogok/          # プロジェクト固有の開発環境例
         └── flake.nix
 ```
 
-## インストールされるツール
+## プロジェクト用 devShell の作り方
 
-- ghq, fzf, ripgrep, eza, bat - CLI ツール
-- neovim - エディタ
-- nodejs, uv - ランタイム・パッケージマネージャ
-- wezterm - ターミナル
-- fish - シェル (direnv, z プラグイン付き)
+### 1. プロジェクトに flake.nix を作成
+
+```nix
+{
+  description = "Project dev environment";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+  };
+
+  outputs = { self, nixpkgs }:
+    let
+      # 複数システム対応
+      forAllSystems = nixpkgs.lib.genAttrs [ "x86_64-linux" "aarch64-darwin" ];
+    in
+    {
+      devShells = forAllSystems (system:
+        let pkgs = nixpkgs.legacyPackages.${system};
+        in {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
+              nodejs_22
+              pnpm
+              # 必要なパッケージを追加
+            ];
+          };
+        });
+    };
+}
+```
+
+### 2. direnv で自動有効化
+
+```bash
+echo 'use flake' > .envrc
+direnv allow
+```
+
+これで、ディレクトリに入ると自動的に開発環境が有効になります。
+
+### よく使うパッケージ例
+
+```nix
+# Node.js
+nodejs_22 pnpm bun
+
+# Python
+python313 uv
+
+# Rust (バージョン固定する場合は rust-overlay を使用)
+cargo rustc
+
+# Go
+go
+
+# その他
+jq yq-go awscli2
+```

@@ -10,9 +10,18 @@
   };
 
   outputs = { nixpkgs, home-manager, ... }: {
-    homeConfigurations."p4stela@wsl" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
-      modules = [ ./home/linux.nix ];
+    homeConfigurations = {
+      # WSL (Linux x86_64)
+      "p4stela@wsl" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        modules = [ ./home/linux.nix ];
+      };
+
+      # macOS (Apple Silicon)
+      "p4stela@mac" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+        modules = [ ./home/darwin.nix ];
+      };
     };
   };
 }
