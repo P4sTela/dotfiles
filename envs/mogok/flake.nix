@@ -26,8 +26,12 @@
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             rustToolchain
+            cargo-make
+	    ast-grep
+	    taplo
             pkg-config
             openssl
+	    postgresql.lib
             nodePackages.npm
             nodejs_22
             bun
@@ -39,7 +43,8 @@
             echo "🥟 Bun: $(bun --version)"
           '';
 
-          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
+          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.postgresql.lib}/lib/pkgconfig";
+          LIBRARY_PATH = "${pkgs.postgresql.lib}/lib";
         };
       });
 }
