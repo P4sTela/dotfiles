@@ -15,6 +15,10 @@
   programs.fish.interactiveShellInit = ''
     # Homebrew
     eval (/opt/homebrew/bin/brew shellenv)
+    if test -d /opt/homebrew/share/fish/vendor_completions.d
+      contains /opt/homebrew/share/fish/vendor_completions.d $fish_complete_path
+      or set -p fish_complete_path /opt/homebrew/share/fish/vendor_completions.d
+    end
 
     # OrbStack
     source ~/.orbstack/shell/init2.fish 2>/dev/null || :

@@ -23,6 +23,19 @@
   programs.fish = {
     enable = true;
     interactiveShellInit = ''
+      # Nix の環境変数と PATH を設定
+      if test -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+      end
+
+      # Nix の補完パスを追加
+      # fish 起動時に fish_complete_path が初期化された後で XDG_DATA_DIRS が設定されるため手動追加が必要
+      for p in ~/.nix-profile/share/fish/vendor_completions.d /nix/var/nix/profiles/default/share/fish/vendor_completions.d
+        if test -d $p; and not contains $p $fish_complete_path
+          set -p fish_complete_path $p
+        end
+      end
+
       set -g fish_greeting
 
       # Load secrets from local file (not tracked in git)
