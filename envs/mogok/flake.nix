@@ -27,11 +27,12 @@
           buildInputs = with pkgs; [
             rustToolchain
             cargo-make
-	    ast-grep
-	    taplo
+            ast-grep
+            taplo
+            diesel-cli
             pkg-config
             openssl
-	    postgresql.lib
+            postgresql.lib
             nodePackages.npm
             nodejs_22
             bun
