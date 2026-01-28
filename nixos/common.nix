@@ -13,6 +13,8 @@
 
   # 基本パッケージ
   environment.systemPackages = with pkgs; [
+    coreutils
+    util-linux
     neovim
     git
     curl
