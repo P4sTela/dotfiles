@@ -4,7 +4,6 @@
 {
   imports = [
     ../common.nix
-    <nixos-wsl/modules>
   ];
 
   # WSL 固有設定

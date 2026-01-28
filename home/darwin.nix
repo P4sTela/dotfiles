@@ -40,7 +40,7 @@
           IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
         };
       };
-      "desktop" = {
+      "wsl" = {
         hostname = "100.75.46.78";
         user = "p4stela";
       };

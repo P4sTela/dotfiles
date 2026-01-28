@@ -9,5 +9,6 @@
 
   home.packages = with pkgs; [
     # NixOS-specific packages (if any)
+    wezterm
   ];
 }
