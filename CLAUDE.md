@@ -4,18 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-Nix Flakes + Home Manager による宣言的な dotfiles リポジトリ。WSL2 および macOS (Apple Silicon) 環境向け。
+Nix Flakes + Home Manager + NixOS による宣言的な dotfiles リポジトリ。NixOS on WSL および macOS (Apple Silicon) 環境向け。
 
 ## Commands
 
-### Home Manager (WSL)
+### NixOS (WSL)
 
 ```bash
 # 設定を適用
-home-manager switch --flake .#p4stela@wsl
+sudo nixos-rebuild switch --flake .#wsl
 
-# 初回適用 (home-manager コマンドがない場合)
-nix run home-manager -- switch --flake .#p4stela@wsl
+# テスト（再起動なし）
+sudo nixos-rebuild test --flake .#wsl
 ```
 
 ### Home Manager (macOS)
@@ -51,17 +51,19 @@ direnv allow
 ## Architecture
 
 ### Flake 構成
-- `flake.nix` - ルート flake。Home Manager 設定を定義
-  - `p4stela@wsl` - WSL (Linux x86_64) 用
-  - `p4stela@mac` - macOS (Apple Silicon) 用
-- `home/common.nix` - 共通設定 (パッケージ、プログラム、シェル設定)
-- `home/linux.nix` - Linux (WSL) 固有の設定
+- `flake.nix` - ルート flake。NixOS と Home Manager 設定を定義
+  - `nixosConfigurations.wsl` - NixOS on WSL 用
+  - `homeConfigurations."p4stela@mac"` - macOS (Apple Silicon) 用
+- `nixos/common.nix` - 共通 NixOS 設定
+- `nixos/wsl/configuration.nix` - WSL 固有の NixOS 設定
+- `home/common.nix` - 共通 Home Manager 設定 (パッケージ、プログラム、シェル設定)
+- `home/nixos.nix` - NixOS 用 Home Manager 設定
 - `home/darwin.nix` - macOS 固有の設定 (Homebrew, 1Password SSH, OrbStack)
 - `envs/<project>/flake.nix` - プロジェクト固有の開発環境 (参考用)
 
 ### 設定の追加方法
 - 共通パッケージ追加: `home/common.nix` の `home.packages` に追加
-- Linux固有パッケージ: `home/linux.nix` の `home.packages` に追加
+- NixOS システム設定: `nixos/common.nix` または `nixos/wsl/configuration.nix` に追加
 - macOS固有パッケージ: `home/darwin.nix` の `home.packages` に追加
 - プログラム設定: `home/common.nix` の `programs.<name>` モジュールを使用
 
