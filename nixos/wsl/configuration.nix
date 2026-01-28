@@ -17,5 +17,7 @@
   networking.hostName = "wsl";
 
   # NixOS の状態バージョン
+  # Note: これは NixOS システムが最初にインストールされたバージョンを示す
+  # home.stateVersion (Home Manager) とは異なる値になることがある
   system.stateVersion = "24.11";
 }
