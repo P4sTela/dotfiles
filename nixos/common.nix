@@ -36,7 +36,7 @@
   # ユーザー設定
   users.users.p4stela = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "docker" ];
     shell = pkgs.fish;
 
     openssh.authorizedKeys.keys = [
@@ -46,4 +46,9 @@
 
   # Fish を有効化
   programs.fish.enable = true;
+
+  programs.nix-ld.enable = true;
+
+  # Docker
+  virtualisation.docker.enable = true;
 }

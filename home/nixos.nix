@@ -11,4 +11,8 @@
     # NixOS-specific packages (if any)
     wezterm
   ];
+
+  programs.fish.interactiveShellInit = ''
+    fish_add_path "$HOME/.local/bin"
+  '';
 }
