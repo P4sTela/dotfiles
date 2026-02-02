@@ -12,6 +12,11 @@
     wezterm
   ];
 
+  services.gnome-keyring = {
+    enable = true;
+    components = ["secrets"];
+  };
+
   programs.fish.interactiveShellInit = ''
     fish_add_path "$HOME/.local/bin"
   '';

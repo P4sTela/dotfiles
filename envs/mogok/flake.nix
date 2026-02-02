@@ -27,6 +27,7 @@
           buildInputs = with pkgs; [
             rustToolchain
             cargo-make
+            cargo-binstall
             cargo-machete
             ast-grep
             taplo

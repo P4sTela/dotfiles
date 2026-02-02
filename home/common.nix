@@ -6,13 +6,16 @@
   home.packages = with pkgs; [
     gh
     ghq
+    lazygit
     fzf
     ripgrep
     eza
     bat
+    btop
     nodejs
     neovim
     uv
+    bun
   ];
 
   programs.direnv = {
