@@ -29,6 +29,7 @@
             cargo-make
             cargo-binstall
             cargo-machete
+            cargo-nextest
             ast-grep
             taplo
             diesel-cli

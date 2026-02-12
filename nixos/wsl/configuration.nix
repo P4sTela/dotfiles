@@ -17,6 +17,13 @@
 
   networking.hostName = "wsl";
 
+  # DNS 設定 (1.1.1.1 を使用)
+  wsl.wslConf.network.generateResolvConf = false;
+  networking.nameservers = [ "1.1.1.1" ];
+
+  wsl.wslConf.automount.enabled = false;
+  wsl.wslConf.interop.appendWindowsPath = false;
+
   # NVIDIA/CUDA サポート (WSL)
   environment.sessionVariables = {
     LD_LIBRARY_PATH = "/usr/lib/wsl/lib";
