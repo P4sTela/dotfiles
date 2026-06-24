@@ -2,7 +2,7 @@
   description = "Mogok dev environment";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -13,32 +13,33 @@
   outputs = { self, nixpkgs, flake-utils, rust-overlay }:
     flake-utils.lib.eachDefaultSystem (system:
       let
-        overlays = [ (import rust-overlay) ];
-        pkgs = import nixpkgs {
-          inherit system overlays;
+        pkgs = import nixpkgs { inherit system; };
+        rustPkgs = import nixpkgs {
+          inherit system;
+          overlays = [ (import rust-overlay) ];
         };
-
-        rustToolchain = pkgs.rust-bin.stable."1.90.0".default.override {
+        rustToolchain = rustPkgs.rust-bin.stable."1.90.0".default.override {
           extensions = [ "rust-src" "rust-analyzer" "rustfmt" "clippy" ];
         };
       in
       {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
+          nativeBuildInputs = with pkgs; [
             rustToolchain
             cargo-make
             cargo-binstall
-            cargo-machete
             cargo-nextest
-            ast-grep
-            taplo
             diesel-cli
             pkg-config
-            openssl
-            postgresql.lib
-            nodePackages.npm
             nodejs_22
             bun
+	    sccache
+            # cargo-machete, taplo, ast-grep は cargo make が binstall で管理
+          ];
+
+          buildInputs = with pkgs; [
+            openssl
+            postgresql.lib
           ];
 
           shellHook = ''
@@ -46,10 +47,6 @@
             echo "📦 Node: $(node --version)"
             echo "🥟 Bun: $(bun --version)"
           '';
-
-          PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig:${pkgs.postgresql.lib}/lib/pkgconfig";
-          LIBRARY_PATH = "${pkgs.postgresql.lib}/lib";
         };
       });
 }
-
