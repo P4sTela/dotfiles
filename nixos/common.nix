@@ -3,10 +3,21 @@
 
 {
   # Nix 設定
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    # ストアの重複をハードリンクで自動最適化
+    auto-optimise-store = true;
+  };
+
+  # 古い世代を定期的に自動 GC
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
 
   # タイムゾーン
   time.timeZone = "Asia/Tokyo";
@@ -16,8 +27,6 @@
 
   # 基本パッケージ
   environment.systemPackages = with pkgs; [
-    coreutils
-    util-linux
     neovim
     git
     curl
@@ -32,7 +41,7 @@
     # 追加のセキュリティ設定（推奨）
     settings = {
       PubkeyAuthentication = true;
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
       PermitRootLogin = "no";
     };
   };
