@@ -1,9 +1,12 @@
 # 共通 NixOS 設定
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   # Nix 設定
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # タイムゾーン
   time.timeZone = "Asia/Tokyo";
@@ -19,6 +22,7 @@
     git
     curl
     wget
+    htop
   ];
 
   # SSHサーバーの有効化
@@ -36,13 +40,18 @@
   # ユーザー設定
   users.users.p4stela = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [
+      "wheel"
+      "docker"
+    ];
     shell = pkgs.fish;
 
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAXE3/lHZSI0rdmhrnAMo4qRSJYVNvDhzNdjp4djizH8"
     ];
   };
+
+  users.users.root.shell = pkgs.fish;
 
   # Fish を有効化
   programs.fish.enable = true;
