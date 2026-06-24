@@ -12,13 +12,14 @@
     eza
     bat
     btop
-    nodejs
+    nodejs_24
     neovim
     uv
     bun
+    aria2
     nil
     nixd
-    nixfmt-rfc-style
+    nixfmt
   ];
 
   programs.direnv = {
