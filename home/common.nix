@@ -16,6 +16,9 @@
     neovim
     uv
     bun
+    nil
+    nixd
+    nixfmt-rfc-style
   ];
 
   programs.direnv = {
@@ -65,6 +68,7 @@
 
   programs.git = {
     enable = true;
+    lfs.enable = true;
     signing = {
       key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJFS7QAGA/JK7Orgdp88AC9Fc4vInaLItBNASgPvDPLA";
       signByDefault = true;
@@ -72,7 +76,7 @@
     settings = {
       user = {
         name = "P4sTela";
-        email = "p4stela.dev@gmail.com";
+        email = "hello@p4stela.net";
       };
       init.defaultBranch = "main";
       push.autoSetupRemote = true;
