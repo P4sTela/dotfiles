@@ -11,9 +11,13 @@
       url = "github:nix-community/NixOS-WSL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { nixpkgs, home-manager, nixos-wsl, ... }: {
+  outputs = { nixpkgs, home-manager, nixos-wsl, disko, ... }: {
     # NixOS システム設定
     nixosConfigurations = {
       wsl = nixpkgs.lib.nixosSystem {
@@ -27,6 +31,15 @@
             home-manager.useUserPackages = true;
             home-manager.users.p4stela = import ./home/nixos.nix;
           }
+        ];
+      };
+
+      # Proxmox VM (UEFI / VirtIO, disko + nixos-anywhere)
+      proxmox = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          ./nixos/proxmox/configuration.nix
         ];
       };
     };
