@@ -16,6 +16,7 @@
     neovim
     uv
     bun
+    ni
     aria2
     nil
     nixd
