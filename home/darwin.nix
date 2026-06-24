@@ -8,7 +8,6 @@
 
   home.packages = with pkgs; [
     # Mac-specific packages
-    wezterm
   ];
 
   # macOS-specific fish configuration
@@ -33,20 +32,18 @@
   # macOS-specific SSH configuration
   programs.ssh = {
     includes = [ "~/.orbstack/ssh/config" ];
-    matchBlocks = {
+    settings = {
       "*" = {
-        forwardAgent = true;
-        extraOptions = {
-          IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
-        };
+        ForwardAgent = true;
+        IdentityAgent = "\"~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
       };
       "wsl" = {
-        hostname = "100.75.46.78";
-        user = "p4stela";
+        HostName = "100.75.46.78";
+        User = "p4stela";
       };
       "sato-containerlab" = {
-        hostname = "sato-containerlab";
-        user = "root";
+        HostName = "sato-containerlab";
+        User = "root";
       };
     };
   };
